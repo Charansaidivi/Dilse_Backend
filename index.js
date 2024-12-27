@@ -28,6 +28,4 @@ app.use('/uploads',express.static('uploads'))
 app.listen(PORT,()=>{
     console.log(`server is running on port ${PORT}`)
 })
-app.use('/',(req,res)=>{
-    res.send("<h1>welcome to home page</h1>")
-})
+              

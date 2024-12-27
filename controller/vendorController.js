@@ -47,7 +47,8 @@ const vendorLogin =async(req,res)=>{
             return res.status(400).json({msg:'Invalid credentials'});
         }
         const token = jwt.sign({ vendorId: vendor._id }, secretKey, { expiresIn: '1h' });
-        res.status(200).json({msg:"Login sucess",token})
+        const vendorId=vendor._id
+        res.status(200).json({msg:"Login sucess",token,vendorId})
         console.log(email)
     }
     catch(error){
@@ -64,5 +65,24 @@ const getAllVendor=async(req,res)=>{
         return res.status(500).json({msg:"Internal server Error"})
     }
 }
+const getVendorById= async(req,res)=>{
+    const vendorId = req.params.vendorId;
+  try {
+    const vendor = await Vendor.findById(vendorId).populate('firms');
+    if (!vendor) {
+      return res.status(404).json({ error: 'Vendor not found' });
+    }
+    if(vendor.firms.length===0){
+        return res.status(404).json({ error: 'Vendor firm registered' });
+    }
+    const vendorFirmId = vendor.firms[0]._id;
+    const firm_name=vendor.firms[0].firmName
+    res.status(200).json({ vendorId, vendorFirmId,firm_name});
+    console.log(`Firm ID fetched: ${vendorFirmId}`);
+  } catch (error) {
+    console.error('Error fetching vendor by ID:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
 
-module.exports = { vendorRegister,vendorLogin,getAllVendor };
+module.exports = { vendorRegister,vendorLogin,getAllVendor,getVendorById };

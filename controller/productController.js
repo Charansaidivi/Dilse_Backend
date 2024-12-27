@@ -1,6 +1,7 @@
 const Product= require('../models/Product')
 const Firm= require('../models/Firm')
 const multer= require('multer')
+const path = require('path')
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -49,17 +50,33 @@ const getProduct= async(req,res)=>{
     return res.status(500).json({msg:"internal serever error"})
   }
 }
-const deleteProduct= async(req,res)=>{
+const fs = require('fs') // Import the File System module
+
+const deleteProduct = async (req, res) => {
   try {
-    productId= req.params.productId
-    const product = await Product.findByIdAndDelete(productId)
-    if(!product){
-      return res.status(404).json({message: "Product not found"})
+    const productId = req.params.productId;
+    const product = await Product.findByIdAndDelete(productId);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" })
     }
-    return res.status(200).json({msg:"product deleted sucessfully"})
+
+    // Check if the product has an associated image
+    if (product.image) {
+      const imagePath = path.join(__dirname, '..', 'uploads', product.image)
+
+      // Delete the image file from the uploads folder
+      fs.unlink(imagePath, (err) => {
+        if (err) {
+          console.error("Error deleting image:", err)
+        }
+      })
+    }
+
+    return res.status(200).json({ msg: "Product deleted successfully" })
   } catch (error) {
     console.log(error)
-    return res.status(500).json({msg:"internal serever error"})
+    return res.status(500).json({ msg: "Internal server error" })
   }
 }
 module.exports={addProduct:[upload.single('image'),addProduct],getProduct,deleteProduct}
