@@ -60,7 +60,12 @@ const deleteProduct = async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: "Product not found" })
     }
-
+    const firmId= product.firm[0]
+    const firm = await Firm.findOneAndUpdate(
+      { _id: firmId },
+      { $pull: { products: productId } },
+      { new: true }
+    )
     // Check if the product has an associated image
     if (product.image) {
       const imagePath = path.join(__dirname, '..', 'uploads', product.image)
