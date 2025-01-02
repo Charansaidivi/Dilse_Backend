@@ -46,7 +46,7 @@ const addFirm = async (req, res) => {
     vendor.firms.push(savedFirm); // Access the specific vendor's 'firms' property
     await vendor.save();
 
-    return res.status(200).json({ msg: "Firm created successfully",firmId });
+    return res.status(200).json({ msg: "Firm created successfully",firmId,firmName });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ msg: "Internal error" });

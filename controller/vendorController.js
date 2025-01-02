@@ -78,7 +78,6 @@ const getVendorById= async(req,res)=>{
     const vendorFirmId = vendor.firms[0]._id;
     const firm_name=vendor.firms[0].firmName
     res.status(200).json({ vendorId, vendorFirmId,firm_name});
-    console.log(`Firm ID fetched: ${vendorFirmId}`);
   } catch (error) {
     console.error('Error fetching vendor by ID:', error);
     res.status(500).json({ error: 'Internal server error' });

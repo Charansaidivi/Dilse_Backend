@@ -11,8 +11,6 @@ const verifyToken = async (req, res, next) => {
   
     try {
       const decoded = jwt.verify(token, secretKey);
-      console.log(decoded)
-      console.log(decoded.vendorId)
       const vendor = await Vendor.findById(decoded.vendorId);
       if (!vendor) {
         return res.status(401).json({ msg: 'Vendor not found.' });
