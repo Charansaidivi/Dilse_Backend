@@ -5,11 +5,11 @@ const mongoose = require('mongoose')
 const VenderRoutes= require('./routes/VendorRoutes')
 const firmRoutes= require('./routes/FirmRoutes')
 const productRouters= require('./routes/ProductRoutes')
+const userRoutes = require('./routes/UserRoutes')
 const bodyParser=require('body-parser')
 const path = require('path')
 const cors= require('cors')
 const app= express()
-
 const PORT = process.env.PORT || 5000
 dotEnv.config()
 app.use(cors())
@@ -24,8 +24,8 @@ app.use(bodyParser.json())
 app.use('/vendor',VenderRoutes)
 app.use('/firm',firmRoutes)
 app.use('/product',productRouters)
+app.use('/user',userRoutes)
 app.use('/uploads',express.static('uploads'))
 app.listen(PORT,()=>{
     console.log(`server is running on port ${PORT}`)
 })
-              
